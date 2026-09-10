@@ -1,11 +1,13 @@
-export interface Product {
+﻿export interface Product {
   id: string;
   name: string;
   barcode?: string;
-  categoryId: string;
+  categoryId?: string;
   categoryName?: string;
-  unitId: string;
+  category?: { id: string; name: string };
+  unitId?: string;
   unitName?: string;
+  unit?: { id: string; name: string; symbol?: string };
   sellingPrice: number;
   wholesalePrice?: number;
   isWholesaleAvailable?: boolean;

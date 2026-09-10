@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FileSpreadsheet, UploadCloud, CheckCircle2, AlertTriangle, X, Loader2 } from 'lucide-react';
+import { FileSpreadsheet, UploadCloud, CheckCircle2, AlertTriangle, X, Loader2, Download } from 'lucide-react';
 import { useImportPreviewMutation, useImportCommitMutation } from '../api/useProductsMutations';
 import type { ImportPreviewResponse } from '../types/products.types';
 
@@ -14,6 +14,27 @@ export const ImportProductsModal: React.FC<ImportProductsModalProps> = ({ isOpen
 
   const previewMutation = useImportPreviewMutation();
   const commitMutation = useImportCommitMutation();
+
+  const handleDownloadTemplate = () => {
+    const csvContent =
+      '\uFEFFname,barcode,category_name,unit_symbol,selling_price,purchase_cost,min_stock_level,description,wholesale_price,is_wholesale_available\n' +
+      'صابون سائل ديتول 500 مل,6221234567890,المنظفات,قطعة,35.00,25.00,10,صابون سائل معقم لليدين,30.00,1\n' +
+      'مسحوق غسيل أوتوماتيك 3 كجم,6221234567891,المنظفات,كجم,180.00,140.00,5,مسحوق تنظيف ملابس عالي الرغوة,160.00,1\n' +
+      'معطر جو روز 300 مل,6221234567892,المعطرات,عبوة,45.00,32.00,8,معطر جو برائحة الورد المنعش,38.00,1\n' +
+      'كلور مبيض 1 لتر,6221234567893,المنظفات,لتر,22.00,16.00,15,مبيض ومنظف أسطح متعدد الاستخدامات,19.00,1\n' +
+      'منظف زجاج ومرايا 500 مل,6221234567894,المنظفات,علبة,28.00,20.00,8,ملمع ومنظف للزجاج فائق اللمعان,24.00,1\n';
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'retailos_products_template.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
 
   if (!isOpen) return null;
 
@@ -66,6 +87,30 @@ export const ImportProductsModal: React.FC<ImportProductsModalProps> = ({ isOpen
 
         {/* Content */}
         <div className="p-6 overflow-y-auto space-y-4 flex-1">
+
+          {/* Template Download Card */}
+          <div className="flex items-center justify-between p-3.5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-2xl">
+            <div className="flex items-center gap-2.5">
+              <FileSpreadsheet className="w-5 h-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
+              <div>
+                <p className="text-xs font-bold text-slate-800 dark:text-slate-100">
+                  هل تحتاج قالب Excel / CSV جاهز؟
+                </p>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                  قالب نموذجي يحتوي على أسماء الأعمدة الصحيحة وبيانات تجريبية جاهزة للاستيراد
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={handleDownloadTemplate}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-emerald-700 dark:text-emerald-300 bg-white dark:bg-slate-800 border border-emerald-300 dark:border-emerald-700 rounded-xl hover:bg-emerald-100 dark:hover:bg-emerald-900 transition-colors shadow-sm cursor-pointer"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>تحميل القالب النموذجي</span>
+            </button>
+          </div>
+
           {/* File Upload Box */}
           <div className="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-6 text-center hover:border-emerald-500 transition-colors">
             <input

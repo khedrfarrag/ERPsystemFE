@@ -80,7 +80,14 @@ export const PosSummary: React.FC<PosSummaryProps> = ({
         {totals.totalDiscount > 0 && (
           <div className="flex justify-between text-rose-500 text-xs font-semibold">
             <span>إجمالي الخصومات</span>
-            <span className="font-mono">-{totals.totalDiscount.toFixed(2)} ج.م</span>
+            <span className="font-mono">-{totals.totalDiscount.toFixed(2)}
+
+        {totals.taxAmount > 0 && (
+          <div className="flex justify-between text-emerald-600 dark:text-emerald-400 font-bold text-xs">
+            <span>ضريبة القيمة المضافة (14% VAT):</span>
+            <span className="font-mono">+{totals.taxAmount.toFixed(2)} ج.م</span>
+          </div>
+        )} ج.م</span>
           </div>
         )}
 

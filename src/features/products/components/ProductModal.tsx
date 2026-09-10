@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+﻿import React, { useEffect, useState, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -95,11 +95,25 @@ export const ProductModal: React.FC<ProductModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       if (productToEdit) {
+        const catId =
+          productToEdit.categoryId ||
+          (productToEdit as any).category?.id ||
+          (productToEdit as any).category?.Id ||
+          categories.find((c) => c.name.trim().toLowerCase() === ((productToEdit as any).categoryName || (productToEdit as any).category?.name || '').trim().toLowerCase())?.id ||
+          '';
+
+        const uId =
+          productToEdit.unitId ||
+          (productToEdit as any).unit?.id ||
+          (productToEdit as any).unit?.Id ||
+          units.find((u) => u.name.trim().toLowerCase() === ((productToEdit as any).unitName || (productToEdit as any).unit?.name || '').trim().toLowerCase() || u.symbol?.trim().toLowerCase() === ((productToEdit as any).unitName || (productToEdit as any).unit?.symbol || '').trim().toLowerCase())?.id ||
+          '';
+
         reset({
           name: productToEdit.name,
           barcode: productToEdit.barcode || '',
-          categoryId: productToEdit.categoryId,
-          unitId: productToEdit.unitId,
+          categoryId: catId,
+          unitId: uId,
           purchaseCost: productToEdit.purchaseCost || 0,
           sellingPrice: productToEdit.sellingPrice || 0,
           minStockLevel: productToEdit.minStockLevel || 5,

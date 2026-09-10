@@ -269,14 +269,25 @@ export const B2BOrderDetailsModal: React.FC<B2BOrderDetailsModalProps> = ({
     }
   };
 
-  // WhatsApp click-to-chat
+  // WhatsApp click-to-chat with real status and amounts
   const whatsappUrl = order?.merchantPhone
     ? buildOrderWhatsAppUrl(
         order.merchantPhone,
         order.orderNumber,
-        order.merchantTradeName || merchant?.tradeName || 'التاجر العزيز'
+        order.merchantTradeName || merchant?.tradeName || 'عزيزنا التاجر',
+        order.status,
+        calculatedReviewTotal || order.totalAmount,
+        order.paymentPreference
       )
     : null;
+
+  // Cost guard: Detect any item adjusted below its purchase cost
+  const hasBelowCostItem = isPending && (order?.items || []).some((item) => {
+    const adj = adjustments[item.id];
+    const price = adj ? adj.unitWholesalePrice : item.unitWholesalePrice;
+    const cost = item.purchaseCost ?? 0;
+    return cost > 0 && price < cost;
+  });
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
@@ -532,14 +543,23 @@ export const B2BOrderDetailsModal: React.FC<B2BOrderDetailsModalProps> = ({
                               {/* Wholesale Price */}
                               <td className="px-3 py-3 text-center">
                                 {isPending ? (
-                                  <input
-                                    type="number"
-                                    min="0"
-                                    step="0.5"
-                                    value={adj.unitWholesalePrice}
-                                    onChange={(e) => handlePriceChange(item.id, parseFloat(e.target.value) || 0)}
-                                    className="w-20 px-2 py-1 text-center font-mono font-bold rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
-                                  />
+                                  <div>
+                                    <input
+                                      type="number"
+                                      min={item.purchaseCost ?? 0}
+                                      step="0.5"
+                                      value={adj.unitWholesalePrice}
+                                      onChange={(e) => handlePriceChange(item.id, parseFloat(e.target.value) || 0)}
+                                      className={`w-20 px-2 py-1 text-center font-mono font-bold rounded-lg border ${
+                                        (item.purchaseCost ?? 0) > 0 && adj.unitWholesalePrice < (item.purchaseCost ?? 0)
+                                          ? 'border-rose-500 text-rose-600 bg-rose-50 dark:bg-rose-950/30 ring-2 ring-rose-500/20'
+                                          : 'border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white'
+                                      }`}
+                                    />
+                                    {(item.purchaseCost ?? 0) > 0 && adj.unitWholesalePrice < (item.purchaseCost ?? 0) && (
+                                      <span className="block text-[9px] text-rose-500 font-bold mt-0.5">أقل من التكلفة!</span>
+                                    )}
+                                  </div>
                                 ) : (
                                   <span className="font-mono text-slate-700 dark:text-slate-300">
                                     {item.unitWholesalePrice.toLocaleString('ar-EG', { minimumFractionDigits: 2 })}
@@ -892,7 +912,7 @@ export const B2BOrderDetailsModal: React.FC<B2BOrderDetailsModalProps> = ({
                   </button>
                   <button
                     type="button"
-                    disabled={approveMutation.isPending}
+                    disabled={approveMutation.isPending || hasBelowCostItem}
                     onClick={handleApprove}
                     className="flex items-center gap-1.5 px-5 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-xl text-xs font-bold shadow-md transition-colors"
                   >

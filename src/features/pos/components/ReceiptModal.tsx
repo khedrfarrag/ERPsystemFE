@@ -57,6 +57,34 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
 
         {/* Printable Thermal Receipt Container */}
         <div className="flex-1 overflow-y-auto p-5 bg-slate-100 dark:bg-slate-900/80 flex justify-center">
+          <style>{`
+        @media print {
+          body * {
+            visibility: hidden !important;
+          }
+          #thermal-receipt,
+          #thermal-receipt * {
+            visibility: visible !important;
+          }
+          #thermal-receipt {
+            position: absolute !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 80mm !important;
+            padding: 2mm !important;
+            margin: 0 !important;
+            background: #ffffff !important;
+            color: #000000 !important;
+            font-family: monospace !important;
+            box-shadow: none !important;
+            border: none !important;
+          }
+          @page {
+            size: 80mm auto;
+            margin: 0;
+          }
+        }
+      `}</style>
           <div
             id="thermal-receipt"
             className="w-[300px] bg-white text-black p-4 font-mono text-xs leading-relaxed shadow-md border border-slate-200 print:shadow-none print:border-none print:w-full print:p-0"

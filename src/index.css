@@ -78,8 +78,29 @@
   body {
     background-color: #ffffff !important;
     color: #000000 !important;
+    font-family: system-ui, -apple-system, sans-serif !important;
   }
-  .print\:hidden {
+  .print\:hidden,
+  aside,
+  header,
+  nav,
+  .no-print {
     display: none !important;
+  }
+  .print\:mr-0 {
+    margin-right: 0 !important;
+  }
+  .print\:m-0 {
+    margin: 0 !important;
+  }
+  .print\:p-0 {
+    padding: 0 !important;
+  }
+  .print\:max-w-none {
+    max-width: none !important;
+    width: 100% !important;
+  }
+  table, tr, td, th {
+    page-break-inside: avoid;
   }
 }

@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast';
 import React, { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -46,6 +47,7 @@ export const CloseRegisterModal: React.FC<CloseRegisterModalProps> = ({
       countedAmount: data.countedAmount,
       notes: data.notes?.trim() || null,
     });
+    toast.success('تم إغلاق الوردية وتوريد النقدية وتصفير الدرج بنجاح!');
     reset();
     onClose();
   };
@@ -157,6 +159,12 @@ export const CloseRegisterModal: React.FC<CloseRegisterModalProps> = ({
               className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:border-amber-500"
             />
             {errors.notes && <p className="text-[10px] text-rose-500 mt-1">{errors.notes.message}</p>}
+          </div>
+
+          {/* Cash Drawer Sweep Info */}
+          <div className="p-3 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 rounded-2xl text-[11px] text-blue-800 dark:text-blue-300 flex items-start gap-2">
+            <span className="font-bold">ℹ️ تنبيه التوريد:</span>
+            <span>عند تأكيد الإغلاق، سيتم تسوية الفارق، وتوريد كامل المبلغ الفعلي ({countedAmount.toLocaleString('ar-EG', { minimumFractionDigits: 2 })} ج.م) للخزينة وتصفير الدرج ليصبح (0.00 ج.م) لبدء الوردية القادمة.</span>
           </div>
 
           {/* Actions */}

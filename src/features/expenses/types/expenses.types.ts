@@ -41,6 +41,7 @@ export interface CashRegisterSummary {
   lastFloatAmount?: number | null;
   todayInflows: number;
   todayOutflows: number;
+  isShiftOpen?: boolean;
 }
 
 export interface CashRegisterCloseResult {

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Normalizes a phone number to E.164 digits format (without the leading '+')
  * suitable for the wa.me URL scheme.
  * Defaults to Egypt (+20) if a local 01xxxxxxxxx number is passed.
@@ -52,34 +52,34 @@ export function buildOrderWhatsAppUrl(
     status === 'Pending'
       ? 'قيد المراجعة والتدقيق'
       : status === 'Approved'
-      ? 'تم الاعتماد وجاري التجهيز'
+      ? 'تمت المراجعة والاعتماد'
       : status === 'Invoiced'
-      ? 'تم إصدار الفاتورة وجاري الشحن'
+      ? 'تم إصدار الفاتورة وجاري التجهيز والشحن'
       : status === 'Rejected'
-      ? 'مرفوض'
-      : 'ملغي';
+      ? 'نعتذر، تم رفض الطلب'
+      : 'قيد المتابعة';
 
   const lines = [
-    `مرحباً ${tradeName || 'عميلنا العزيز'}،`,
+    `مرحباً ${tradeName || 'عزيزنا التاجر'}،`,
     `بخصوص طلب التوريد رقم: #${orderNumber}`,
-    `الحالة الحالية: ${statusArabic}`,
+    `حالة الطلب الحالية: ${statusArabic}`,
   ];
 
-  if (totalAmount !== undefined) {
-    lines.push(`إجمالي الطلب: ${totalAmount.toLocaleString('ar-EG')} ج.م`);
+  if (totalAmount !== undefined && totalAmount > 0) {
+    lines.push(`إجمالي المبلغ: ${totalAmount.toLocaleString('ar-EG', { minimumFractionDigits: 2 })} ج.م`);
   }
 
   if (paymentPref) {
     const prefArabic =
       paymentPref === 'Cash'
-        ? 'نقدي'
+        ? 'نقداً'
         : paymentPref === 'Credit'
-        ? 'آجل على الحساب'
+        ? 'آجل (على الحساب)'
         : 'دفعة مقدمة + آجل';
     lines.push(`طريقة السداد: ${prefArabic}`);
   }
 
-  lines.push('نتشرف دائماً بخدمتكم في متجرنا.');
+  lines.push('شكراً لتعاملكم معنا ونسعد بخدمتكم دائماً.');
 
   return buildWhatsAppUrl(phone, lines.join('\n'));
 }

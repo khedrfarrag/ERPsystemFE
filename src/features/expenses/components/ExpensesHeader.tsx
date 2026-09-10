@@ -36,7 +36,7 @@ export const ExpensesHeader: React.FC<ExpensesHeaderProps> = ({
   const currentBalance = registerSummary?.currentBalance ?? 0;
   const todayInflows = registerSummary?.todayInflows ?? 0;
   const todayOutflows = registerSummary?.todayOutflows ?? 0;
-  const hasFloat = !!registerSummary?.lastFloatDate;
+  const isShiftOpen = registerSummary?.isShiftOpen ?? false;
 
   return (
     <div className="space-y-4">
@@ -50,13 +50,13 @@ export const ExpensesHeader: React.FC<ExpensesHeaderProps> = ({
             </h1>
             <span
               className={`px-2.5 py-1 text-xs font-bold rounded-full flex items-center gap-1.5 ${
-                hasFloat
+                isShiftOpen
                   ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
                   : 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300'
               }`}
             >
-              <span className={`w-2 h-2 rounded-full ${hasFloat ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
-              {hasFloat ? 'الوردية نشطة ومفتوحة' : 'لم تُسجل عهدة اليوم'}
+              <span className={`w-2 h-2 rounded-full ${isShiftOpen ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
+              {isShiftOpen ? 'الوردية نشطة ومفتوحة' : 'الوردية مغلقة'}
             </span>
           </div>
           <p className="text-xs text-slate-600 dark:text-slate-300 font-medium mt-1">

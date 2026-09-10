@@ -1,3 +1,4 @@
+import { settingsApi } from '../../settings/api/settingsApi';
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import type { CartItem, CartTotals, CustomerCreditInfo, PosProduct } from '../types/pos.types';
@@ -131,6 +132,24 @@ export function usePosCart() {
     toast.success('تم تفريغ السلة بنجاح');
   }, []);
 
+    // Check if VAT 14% is enabled for store
+  const [isTaxEnabled, setIsTaxEnabled] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('retailos_store_tax_enabled') === 'true';
+    } catch {
+      return false;
+    }
+  });
+
+  useEffect(() => {
+    settingsApi.getStoreProfile().then((store) => {
+      if (store) {
+        setIsTaxEnabled(!!store.taxEnabled);
+        localStorage.setItem('retailos_store_tax_enabled', String(!!store.taxEnabled));
+      }
+    }).catch(() => {});
+  }, []);
+
   // Memoized Totals Calculation
   const totals: CartTotals = useMemo(() => {
     let subtotal = 0;
@@ -145,17 +164,19 @@ export function usePosCart() {
     }
 
     const totalDiscount = lineDiscounts + (overallDiscount || 0);
-    const grandTotal = Math.max(0, subtotal - totalDiscount);
+    const taxableSubtotal = Math.max(0, subtotal - totalDiscount);
+    const taxAmount = isTaxEnabled ? Number((taxableSubtotal * 0.14).toFixed(2)) : 0;
+    const grandTotal = taxableSubtotal + taxAmount;
 
     return {
       subtotal,
       totalDiscount,
-      taxAmount: 0,
+      taxAmount,
       grandTotal,
       itemCount: items.length,
       totalUnits,
     };
-  }, [items, overallDiscount]);
+  }, [items, overallDiscount, isTaxEnabled]);
 
   return {
     items,

@@ -47,11 +47,21 @@ export const StoreProfileTab: React.FC<StoreProfileTabProps> = ({
       setAddress(store.address || '');
       setCurrency(store.currency || 'EGP');
       setTimezone(store.timezone || 'Africa/Cairo');
-      setTaxEnabled(store.taxEnabled ?? true);
+      setTaxEnabled(store.taxEnabled ?? false);
       setAllowNegativeStock(store.allowNegativeStock ?? false);
       setInvoicePrefix(store.invoicePrefix || 'INV-');
     }
   }, [store]);
+
+  const handleToggleTax = () => {
+    if (!isOwner || isSaving) return;
+    setTaxEnabled((prev) => !prev);
+  };
+
+  const handleToggleNegativeStock = () => {
+    if (!isOwner || isSaving) return;
+    setAllowNegativeStock((prev) => !prev);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -175,7 +185,7 @@ export const StoreProfileTab: React.FC<StoreProfileTabProps> = ({
               <button
                 type="button"
                 disabled={!isOwner}
-                onClick={() => setTaxEnabled(!taxEnabled)}
+                onClick={handleToggleTax}
                 className={
                   "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed " +
                   (taxEnabled ? 'bg-primary-600' : 'bg-slate-400 dark:bg-slate-600')
@@ -203,7 +213,7 @@ export const StoreProfileTab: React.FC<StoreProfileTabProps> = ({
               <button
                 type="button"
                 disabled={!isOwner}
-                onClick={() => setAllowNegativeStock(!allowNegativeStock)}
+                onClick={handleToggleNegativeStock}
                 className={
                   "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed " +
                   (allowNegativeStock ? 'bg-amber-600' : 'bg-slate-400 dark:bg-slate-600')

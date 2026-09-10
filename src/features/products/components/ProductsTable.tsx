@@ -99,10 +99,10 @@ export const ProductsTable: React.FC<ProductsTableProps> = ({
                   {/* Category & Unit */}
                   <td className="py-3.5 px-3">
                     <span className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-[11px]">
-                      {p.categoryName || 'عام'}
+                      {p.categoryName || (p.category?.name) || 'عام'}
                     </span>
                     <span className="block text-[10px] text-slate-600 dark:text-slate-300 mt-1 font-semibold">
-                      الوحدة: {p.unitName || 'قطعة'}
+                      الوحدة: {p.unitName || (p.unit?.name) || (p.unit?.symbol) || 'قطعة'}
                     </span>
                   </td>
 
