@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+  .dark {
+    color-scheme: dark;
+  }
+  body {
+    font-family: 'Cairo', sans-serif;
+    direction: rtl;
+    background-color: #f8fafc;
+    color: #0f172a;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  .dark body {
+    background-color: #0f172a;
+    color: #f8fafc;
+  }
+}
+
+@layer components {
+  /* High-Contrast Interactive Buttons */
+  .btn {
+    @apply px-4 py-2 rounded-xl font-bold transition duration-150 inline-flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-xs;
+  }
+  .btn-primary {
+    @apply bg-primary-600 text-white hover:bg-primary-700 active:scale-95 shadow-sm;
+  }
+  .btn-secondary {
+    @apply bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 text-slate-800 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-700;
+  }
+
+  /* High-Contrast Card System */
+  .card {
+    @apply bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200/90 dark:border-slate-700 shadow-sm text-slate-900 dark:text-slate-100 transition-colors;
+  }
+
+  /* WCAG High-Contrast Inputs, Selects & Textareas */
+  .input {
+    @apply w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all;
+  }
+
+  /* High-Contrast Table Architecture */
+  .table-header {
+    @apply bg-slate-100 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 font-extrabold text-slate-800 dark:text-slate-100;
+  }
+  .table-row-hover {
+    @apply transition-colors hover:bg-slate-100/80 dark:hover:bg-slate-700/60;
+  }
+
+  /* Status Badges with Rich High Contrast */
+  .badge {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold border transition-colors;
+  }
+  .badge-success {
+    @apply bg-emerald-50 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800;
+  }
+  .badge-danger {
+    @apply bg-rose-50 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300 border-rose-200 dark:border-rose-800;
+  }
+  .badge-warning {
+    @apply bg-amber-50 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border-amber-200 dark:border-amber-800;
+  }
+  .badge-info {
+    @apply bg-sky-50 text-sky-800 dark:bg-sky-950/60 dark:text-sky-300 border-sky-200 dark:border-sky-800;
+  }
+}
+
+/* Print Optimization */
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+  .print\:hidden {
+    display: none !important;
+  }
+}
