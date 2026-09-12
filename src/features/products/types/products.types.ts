@@ -79,9 +79,12 @@ export interface ImportPreviewRow {
 
 export interface ImportPreviewResponse {
   totalRows: number;
-  validRowsCount: number;
-  invalidRowsCount: number;
-  rows: ImportPreviewRow[];
+  validRows?: number;
+  validRowsCount?: number;
+  errorRows?: number;
+  invalidRowsCount?: number;
+  errors?: Array<{ row: number; field?: string; message: string } | string>;
+  rows?: ImportPreviewRow[];
 }
 
 export interface ImportCommitResponse {

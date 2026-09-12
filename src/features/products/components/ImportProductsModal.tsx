@@ -146,12 +146,12 @@ export const ImportProductsModal: React.FC<ImportProductsModalProps> = ({ isOpen
                 </div>
                 <div className="text-emerald-600 font-bold">
                   <span>الأصناف السليمة: </span>
-                  <b className="font-mono">{previewData.validRowsCount}</b>
+                  <b className="font-mono">{(previewData.validRows ?? previewData.validRowsCount ?? 0)}</b>
                 </div>
-                {previewData.invalidRowsCount > 0 && (
+                {((previewData.errorRows ?? previewData.invalidRowsCount ?? previewData.errors?.length ?? 0) > 0) && (
                   <div className="text-rose-500 font-bold">
                     <span>صفوف تحتوي أخطاء: </span>
-                    <b className="font-mono">{previewData.invalidRowsCount}</b>
+                    <b className="font-mono">{previewData.errorRows ?? previewData.invalidRowsCount ?? previewData.errors?.length ?? 0}</b>
                   </div>
                 )}
               </div>
@@ -170,7 +170,7 @@ export const ImportProductsModal: React.FC<ImportProductsModalProps> = ({ isOpen
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
-                    {previewData.rows.slice(0, 10).map((r, i) => (
+                    {(previewData.rows || []).slice(0, 10).map((r, i) => (
                       <tr key={i} className={r.isValid ? '' : 'bg-rose-50/50 dark:bg-rose-950/30'}>
                         <td className="py-2 px-3 font-mono">{r.rowNumber}</td>
                         <td className="py-2 px-3 font-semibold">{r.name}</td>
@@ -208,11 +208,11 @@ export const ImportProductsModal: React.FC<ImportProductsModalProps> = ({ isOpen
           <button
             type="button"
             onClick={handleCommit}
-            disabled={!previewData || previewData.validRowsCount === 0 || commitMutation.isPending}
+            disabled={!previewData || (previewData.validRows ?? previewData.validRowsCount ?? 0) === 0 || commitMutation.isPending}
             className="flex items-center gap-1.5 px-6 py-2.5 text-xs font-extrabold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-md disabled:opacity-40"
           >
             {commitMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
-            <span>تأكيد الاستيراد ({previewData?.validRowsCount || 0} صنف)</span>
+            <span>تأكيد الاستيراد ({previewData?.validRows ?? previewData?.validRowsCount ?? 0} صنف)</span>
           </button>
         </div>
       </div>
