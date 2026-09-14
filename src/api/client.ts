@@ -28,9 +28,16 @@ api.interceptors.response.use(
         toast.error('انتهت صلاحية الجلسة، يرجى تسجيل الدخول مجدداً');
         window.location.href = '/login';
       }
+    } else if (error.code === 'ERR_NETWORK' || !error.response) {
+      toast.error('تعذر الاتصال بالسيرفر السحابي، يرجى التحقق من اتصال الإنترنت');
     }
     return Promise.reject(error);
   }
 );
+
+export const changePasswordApi = async (payload: { currentPassword: string; newPassword: string }) => {
+  const response = await api.post('/auth/change-password', payload);
+  return response.data;
+};
 
 export default api;

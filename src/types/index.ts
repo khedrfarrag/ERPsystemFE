@@ -16,6 +16,7 @@ export interface User {
   role: UserRole;
   storeId: string;
   storeName: string;
+  mustChangePassword?: boolean;
 }
 
 export interface AuthResponse {

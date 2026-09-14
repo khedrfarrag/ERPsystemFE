@@ -7,6 +7,7 @@ interface AuthContextType {
   token: string | null;
   login: (authData: AuthResponse) => void;
   logout: () => void;
+  clearMustChangePassword: () => void;
   isAuthenticated: boolean;
   isOwnerOrManager: boolean;
   isMerchant: boolean;
@@ -44,6 +45,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     toast('تم تسجيل الخروج بنجاح', { icon: '👋' });
   };
 
+  const clearMustChangePassword = () => {
+    if (user) {
+      const updatedUser = { ...user, mustChangePassword: false };
+      setUser(updatedUser);
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+    }
+  };
+
   const isOwnerOrManager = user?.role === 'Owner' || user?.role === 'Manager';
   const isMerchant = user?.role === 'Merchant';
 
@@ -54,6 +63,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         token,
         login,
         logout,
+        clearMustChangePassword,
         isAuthenticated: !!token,
         isOwnerOrManager,
         isMerchant,

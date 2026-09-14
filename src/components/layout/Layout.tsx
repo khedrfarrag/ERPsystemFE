@@ -4,9 +4,10 @@ import { useAuth } from '../../context/AuthContext';
 import { Sidebar } from './Sidebar';
 import { Navbar } from './Navbar';
 import { UserOnboardingTour } from '../onboarding/UserOnboardingTour';
+import { ForceChangePasswordModal } from '../auth/ForceChangePasswordModal';
 
 export const Layout: React.FC = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
@@ -23,6 +24,7 @@ export const Layout: React.FC = () => {
       </div>
       <div className="print:hidden">
         <UserOnboardingTour />
+        <ForceChangePasswordModal isOpen={!!user?.mustChangePassword} />
       </div>
     </div>
   );
