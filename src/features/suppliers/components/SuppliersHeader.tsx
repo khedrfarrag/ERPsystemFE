@@ -1,11 +1,12 @@
 import React from 'react';
-import { Truck, Wallet, Users, Plus, ShoppingBag } from 'lucide-react';
+import { Truck, Wallet, Users, Plus, ShoppingBag, Sparkles } from 'lucide-react';
 
 interface SuppliersHeaderProps {
   totalCount: number;
   totalPayables: number;
   creditorsCount: number;
   onOpenAddModal: () => void;
+  onOpenAiScannerModal?: () => void;
   canManage: boolean;
 }
 
@@ -14,6 +15,7 @@ export const SuppliersHeader: React.FC<SuppliersHeaderProps> = ({
   totalPayables,
   creditorsCount,
   onOpenAddModal,
+  onOpenAiScannerModal,
   canManage,
 }) => {
   return (
@@ -30,7 +32,19 @@ export const SuppliersHeader: React.FC<SuppliersHeaderProps> = ({
         </div>
 
         {canManage && (
-          <button
+          <div className="flex items-center gap-2">
+            {onOpenAiScannerModal && (
+              <button
+                type="button"
+                onClick={onOpenAiScannerModal}
+              className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-violet-200 dark:border-violet-800 bg-violet-50 dark:bg-violet-950/40 hover:bg-violet-100 dark:hover:bg-violet-900/50 text-violet-700 dark:text-violet-300 text-xs font-bold transition-all shadow-sm"
+            >
+              <Sparkles className="w-4 h-4 text-violet-600 dark:text-violet-400" />
+              <span>مسح فاتورة ذكي</span>
+              </button>
+            )}
+
+            <button
             type="button"
             onClick={onOpenAddModal}
             className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-extrabold shadow-md shadow-emerald-600/20 hover:shadow-emerald-600/35 transition-all transform active:scale-98"
@@ -38,6 +52,7 @@ export const SuppliersHeader: React.FC<SuppliersHeaderProps> = ({
             <Plus className="w-4 h-4" />
             <span>إضافة مورد جديد</span>
           </button>
+          </div>
         )}
       </div>
 

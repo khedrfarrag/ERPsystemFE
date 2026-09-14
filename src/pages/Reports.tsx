@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../api/client';
 import React, { useState, useMemo, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
 import {
@@ -91,7 +92,7 @@ export const Reports: React.FC = () => {
   };
 
   const handleExportCsv = () => {
-    const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:5030/api';
+    const apiBase = API_BASE_URL;
     let url = `${apiBase}/reports/${activeTab}?format=csv`;
     if (isoFrom) url += `&from=${encodeURIComponent(isoFrom)}`;
     if (isoTo) url += `&to=${encodeURIComponent(isoTo)}`;

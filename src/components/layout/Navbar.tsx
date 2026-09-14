@@ -4,7 +4,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { useQuery } from '@tanstack/react-query';
 import api from '../../api/client';
 import type { ApiResponse, DashboardSummary } from '../../types';
-import { Store, Wallet, AlertTriangle, Sun, Moon, LogOut } from 'lucide-react';
+import { Store, Wallet, AlertTriangle, Sun, Moon, LogOut, Sparkles } from 'lucide-react';
 import { NotificationDropdown } from './NotificationDropdown';
 
 export const Navbar: React.FC = () => {
@@ -55,6 +55,17 @@ export const Navbar: React.FC = () => {
 
       {/* Right: Theme Toggle & User Info & Logout */}
       <div className="flex items-center gap-3">
+        {/* Interactive Tour Button */}
+        <button
+          type="button"
+          onClick={() => window.dispatchEvent(new CustomEvent('retailos:open-tour', { detail: { step: -1 } }))}
+          title="دليل وجولة النظام التفاعلية"
+          className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-primary-50 to-indigo-50 dark:from-primary-950/60 dark:to-indigo-950/60 border border-primary-200/80 dark:border-primary-800 text-primary-700 dark:text-primary-300 hover:scale-105 active:scale-95 transition flex items-center gap-1.5 cursor-pointer text-xs font-bold shadow-sm"
+        >
+          <Sparkles className="w-3.5 h-3.5 text-primary-600 dark:text-primary-400" />
+          <span className="hidden sm:inline">جولة في النظام</span>
+        </button>
+
         {/* Notification Center */}
         <NotificationDropdown />
 

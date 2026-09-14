@@ -42,6 +42,7 @@ export interface StoreProfile {
   timezone: string;
   taxEnabled: boolean;
   allowNegativeStock: boolean;
+  enableInvoiceArchiving?: boolean;
   invoicePrefix?: string | null;
   isActive: boolean;
   createdAt: string;

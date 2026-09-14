@@ -38,6 +38,7 @@ export const StoreProfileTab: React.FC<StoreProfileTabProps> = ({
   const [timezone, setTimezone] = useState('Africa/Cairo');
   const [taxEnabled, setTaxEnabled] = useState(true);
   const [allowNegativeStock, setAllowNegativeStock] = useState(false);
+  const [enableInvoiceArchiving, setEnableInvoiceArchiving] = useState(true);
   const [invoicePrefix, setInvoicePrefix] = useState('INV-');
 
   useEffect(() => {
@@ -49,6 +50,7 @@ export const StoreProfileTab: React.FC<StoreProfileTabProps> = ({
       setTimezone(store.timezone || 'Africa/Cairo');
       setTaxEnabled(store.taxEnabled ?? false);
       setAllowNegativeStock(store.allowNegativeStock ?? false);
+      setEnableInvoiceArchiving(store.enableInvoiceArchiving ?? true);
       setInvoicePrefix(store.invoicePrefix || 'INV-');
     }
   }, [store]);

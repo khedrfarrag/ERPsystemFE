@@ -1,5 +1,5 @@
 import React from 'react';
-import { Package, AlertTriangle, XCircle, Plus, FileSpreadsheet, DollarSign } from 'lucide-react';
+import { Package, AlertTriangle, XCircle, Plus, FileSpreadsheet, Sparkles } from 'lucide-react';
 
 interface ProductsHeaderProps {
   totalCount: number;
@@ -7,6 +7,7 @@ interface ProductsHeaderProps {
   outOfStockCount: number;
   onOpenAddModal: () => void;
   onOpenImportModal: () => void;
+  onOpenAiScannerModal: () => void;
   canManage: boolean;
 }
 
@@ -16,6 +17,7 @@ export const ProductsHeader: React.FC<ProductsHeaderProps> = ({
   outOfStockCount,
   onOpenAddModal,
   onOpenImportModal,
+  onOpenAiScannerModal,
   canManage,
 }) => {
   return (
@@ -33,6 +35,15 @@ export const ProductsHeader: React.FC<ProductsHeaderProps> = ({
 
         {canManage && (
           <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={onOpenAiScannerModal}
+              className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-violet-200 dark:border-violet-800 bg-violet-50 dark:bg-violet-950/40 hover:bg-violet-100 dark:hover:bg-violet-900/50 text-violet-700 dark:text-violet-300 text-xs font-bold transition-all shadow-sm"
+            >
+              <Sparkles className="w-4 h-4 text-violet-600 dark:text-violet-400" />
+              <span>مسح فاتورة ذكي</span>
+            </button>
+
             <button
               type="button"
               onClick={onOpenImportModal}

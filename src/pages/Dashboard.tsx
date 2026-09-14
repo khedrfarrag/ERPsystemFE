@@ -100,14 +100,23 @@ export const Dashboard: React.FC = () => {
             متابعة دقيقة للأرباح، المبيعات، ومراقبة الراكد والنواقص في المخزن لحظياً
           </p>
         </div>
-        <button
-          onClick={fetchDashboardData}
-          disabled={loading}
-          className="btn btn-secondary flex items-center gap-2 self-start sm:self-auto"
-        >
-          <RefreshCw className={"w-4 h-4 " + (loading ? 'animate-spin' : '')} />
-          <span>تحديث البيانات</span>
-        </button>
+        <div className="flex items-center gap-2 self-start sm:self-auto">
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent('retailos:open-tour', { detail: { step: -1 } }))}
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 hover:from-primary-700 hover:to-indigo-700 text-white font-bold text-xs shadow-md shadow-primary-500/20 hover:scale-105 active:scale-95 transition flex items-center gap-2 cursor-pointer"
+          >
+            <Sparkles className="w-4 h-4 text-amber-300" />
+            <span>الجولة الإرشادية للمستخدم</span>
+          </button>
+          <button
+            onClick={fetchDashboardData}
+            disabled={loading}
+            className="btn btn-secondary flex items-center gap-2"
+          >
+            <RefreshCw className={"w-4 h-4 " + (loading ? 'animate-spin' : '')} />
+            <span>تحديث البيانات</span>
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

@@ -10,6 +10,7 @@ import { CreatePurchaseModal } from '../features/suppliers/components/CreatePurc
 import { DisbursePaymentModal } from '../features/suppliers/components/DisbursePaymentModal';
 import { SupplierStatementModal } from '../features/suppliers/components/SupplierStatementModal';
 import { DeleteSupplierModal } from '../features/suppliers/components/DeleteSupplierModal';
+import { AiInvoiceScanModal } from '../features/ai-scanner/components/AiInvoiceScanModal';
 import type { Supplier } from '../features/suppliers/types/suppliers.types';
 
 export const Suppliers: React.FC = () => {
@@ -26,6 +27,7 @@ export const Suppliers: React.FC = () => {
   const [isAddEditModalOpen, setIsAddEditModalOpen] = useState(false);
   const [supplierToEdit, setSupplierToEdit] = useState<Supplier | null>(null);
   const [supplierToDelete, setSupplierToDelete] = useState<Supplier | null>(null);
+  const [isAiScannerOpen, setIsAiScannerOpen] = useState<boolean>(false);
   const [supplierForReps, setSupplierForReps] = useState<Supplier | null>(null);
   const [supplierForPurchase, setSupplierForPurchase] = useState<Supplier | null>(null);
   const [supplierForPayment, setSupplierForPayment] = useState<Supplier | null>(null);
@@ -114,6 +116,7 @@ export const Suppliers: React.FC = () => {
         totalPayables={kpiStats.totalPayables}
         creditorsCount={kpiStats.creditorsCount}
         onOpenAddModal={handleOpenAddModal}
+        onOpenAiScannerModal={() => setIsAiScannerOpen(true)}
         canManage={canManage}
       />
 
@@ -186,6 +189,11 @@ export const Suppliers: React.FC = () => {
         isOpen={supplierToDelete !== null}
         onClose={() => setSupplierToDelete(null)}
         supplier={supplierToDelete}
+      />
+
+      <AiInvoiceScanModal
+        isOpen={isAiScannerOpen}
+        onClose={() => setIsAiScannerOpen(false)}
       />
     </div>
   );

@@ -8,6 +8,7 @@ import { ProductsTable } from '../features/products/components/ProductsTable';
 import { ProductModal } from '../features/products/components/ProductModal';
 import { DeleteProductModal } from '../features/products/components/DeleteProductModal';
 import { ImportProductsModal } from '../features/products/components/ImportProductsModal';
+import { AiInvoiceScanModal } from '../features/ai-scanner/components/AiInvoiceScanModal';
 import type { Product } from '../features/products/types/products.types';
 
 export const Products: React.FC = () => {
@@ -27,6 +28,7 @@ export const Products: React.FC = () => {
   const [productToEdit, setProductToEdit] = useState<Product | null>(null);
   const [productToDelete, setProductToDelete] = useState<Product | null>(null);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [isAiScannerOpen, setIsAiScannerOpen] = useState(false);
 
   // Queries
   const { data: categories = [] } = useCategoriesQuery();
@@ -110,6 +112,7 @@ export const Products: React.FC = () => {
         outOfStockCount={kpiStats.outOfStock}
         onOpenAddModal={handleOpenAddModal}
         onOpenImportModal={() => setIsImportModalOpen(true)}
+        onOpenAiScannerModal={() => setIsAiScannerOpen(true)}
         canManage={canManage}
       />
 
@@ -150,6 +153,13 @@ export const Products: React.FC = () => {
         onDelete={handleDeleteProduct}
         onToggleStatus={handleToggleStatus}
         canManage={canManage}
+      />
+
+      {/* AI Invoice Scanner Modal */}
+      <AiInvoiceScanModal
+        isOpen={isAiScannerOpen}
+        onClose={() => setIsAiScannerOpen(false)}
+        defaultMode="CatalogOnly"
       />
 
       {/* Modals */}

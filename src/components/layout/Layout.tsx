@@ -3,6 +3,7 @@ import { Outlet, Navigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Sidebar } from './Sidebar';
 import { Navbar } from './Navbar';
+import { UserOnboardingTour } from '../onboarding/UserOnboardingTour';
 
 export const Layout: React.FC = () => {
   const { isAuthenticated } = useAuth();
@@ -19,6 +20,9 @@ export const Layout: React.FC = () => {
         <main className="flex-1 p-6 md:p-8 max-w-7xl w-full mx-auto animate-in fade-in duration-300 print:p-0 print:m-0 print:max-w-none">
           <Outlet />
         </main>
+      </div>
+      <div className="print:hidden">
+        <UserOnboardingTour />
       </div>
     </div>
   );
