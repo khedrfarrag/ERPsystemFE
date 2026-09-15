@@ -76,16 +76,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen = false, onClose }) => 
       {/* Sidebar / Mobile Off-Canvas Drawer */}
       <aside
         className={
-          'w-72 sm:w-64 bg-slate-900 text-slate-300 flex flex-col h-screen fixed right-0 top-0 z-50 shadow-2xl lg:shadow-xl border-l border-slate-800 select-none transition-transform duration-300 ease-in-out ' +
+          'w-72 sm:w-64 bg-slate-900 text-slate-300 flex flex-col fixed inset-y-0 right-0 h-dvh max-h-dvh lg:h-screen z-50 shadow-2xl lg:shadow-xl border-l border-slate-800 select-none transition-transform duration-300 ease-in-out ' +
           (isOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0')
         }
       >
-        <div className="p-5 sm:p-6 flex items-center justify-between border-b border-slate-800">
+        <div className="p-4 sm:p-6 flex items-center justify-between border-b border-slate-800 shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary-600 to-indigo-500 flex items-center justify-center text-white font-bold shadow-lg shadow-primary-500/30">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary-600 to-indigo-500 flex items-center justify-center text-white font-bold shadow-lg shadow-primary-500/30 shrink-0">
               <Sparkles className="w-6 h-6" />
             </div>
-            <div>
+            <div className="min-w-0">
               <h1 className="font-extrabold text-lg text-white tracking-wide">RetailOS</h1>
               <p className="text-xs text-slate-400 font-medium truncate max-w-[130px] sm:max-w-[140px]">
                 {storeName}
@@ -104,7 +104,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen = false, onClose }) => 
           </button>
         </div>
 
-        <nav className="flex-1 p-3 sm:p-4 space-y-1.5 overflow-y-auto">
+        <nav className="flex-1 min-h-0 p-3 sm:p-4 space-y-1 overflow-y-auto overscroll-contain">
           {navItems.map((item) => {
             const Icon = item.icon;
             return (
@@ -114,7 +114,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen = false, onClose }) => 
                 end={item.exact}
                 onClick={onClose}
                 className={({ isActive }) =>
-                  "flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all text-sm min-h-[44px] " +
+                  "flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium transition-all text-sm min-h-[42px] " +
                   (isActive
                     ? 'bg-primary-600 text-white font-semibold shadow-md shadow-primary-600/30'
                     : 'text-slate-400 hover:text-white hover:bg-slate-800/60')
@@ -127,13 +127,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen = false, onClose }) => 
           })}
         </nav>
 
-        <div className="p-4 border-t border-slate-800 bg-slate-950/40 pb-safe">
-          <div className="flex items-center justify-between mb-3 px-2">
-            <div className="flex flex-col">
-              <span className="text-sm font-bold text-white">
+        <div className="p-3 sm:p-4 border-t border-slate-800 bg-slate-950/60 pb-safe shrink-0">
+          <div className="flex items-center justify-between mb-2.5 px-1">
+            <div className="flex flex-col min-w-0">
+              <span className="text-sm font-bold text-white truncate">
                 {user ? user.firstName + ' ' + user.lastName : 'المستخدم'}
               </span>
-              <span className="text-xs text-primary-400 font-semibold">
+              <span className="text-xs text-primary-400 font-semibold truncate">
                 {user?.role === 'Owner'
                   ? 'مالك النظام'
                   : user?.role === 'Manager'
@@ -143,30 +143,47 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen = false, onClose }) => 
                   : 'كاشير'}
               </span>
             </div>
+
+            {/* Quick logout icon button right next to user details for instant access */}
+            <button
+              type="button"
+              onClick={() => {
+                onClose?.();
+                logout();
+              }}
+              title="تسجيل الخروج"
+              className="p-2 rounded-xl text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition-colors touch-target flex items-center justify-center cursor-pointer"
+              aria-label="تسجيل الخروج"
+            >
+              <LogOut className="w-5 h-5" />
+            </button>
           </div>
 
-          <button
-            type="button"
-            onClick={() => {
-              onClose?.();
-              window.dispatchEvent(new CustomEvent('retailos:open-tour', { detail: { step: -1 } }));
-            }}
-            className="w-full flex items-center justify-center gap-2 py-2 px-3 mb-2 rounded-xl text-xs font-bold text-primary-300 bg-primary-950/60 border border-primary-800/80 hover:bg-primary-900/60 transition min-h-[40px] cursor-pointer"
-          >
-            <Sparkles className="w-4 h-4 text-amber-300" />
-            <span>الجولة الإرشادية للنظام</span>
-          </button>
+          <div className="space-y-1.5">
+            <button
+              type="button"
+              onClick={() => {
+                onClose?.();
+                window.dispatchEvent(new CustomEvent('retailos:open-tour', { detail: { step: -1 } }));
+              }}
+              className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-bold text-primary-300 bg-primary-950/60 border border-primary-800/80 hover:bg-primary-900/60 transition min-h-[38px] cursor-pointer"
+            >
+              <Sparkles className="w-4 h-4 text-amber-300" />
+              <span>الجولة الإرشادية للنظام</span>
+            </button>
 
-          <button
-            onClick={() => {
-              onClose?.();
-              logout();
-            }}
-            className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-semibold text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 transition min-h-[44px]"
-          >
-            <LogOut className="w-4 h-4" />
-            <span>تسجيل الخروج</span>
-          </button>
+            <button
+              type="button"
+              onClick={() => {
+                onClose?.();
+                logout();
+              }}
+              className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-semibold text-rose-400 bg-rose-950/20 hover:bg-rose-500/15 border border-rose-900/30 hover:text-rose-300 transition min-h-[38px] cursor-pointer"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>تسجيل الخروج</span>
+            </button>
+          </div>
         </div>
       </aside>
     </>
