@@ -1,5 +1,6 @@
 import React from 'react';
 import { Edit, Trash2, Tag, ChevronRight, ChevronLeft, AlertTriangle, XCircle, CheckCircle, Store } from 'lucide-react';
+import { ProductMobileCard } from './ProductMobileCard';
 import type { Product } from '../types/products.types';
 
 interface ProductsTableProps {
@@ -53,7 +54,22 @@ export const ProductsTable: React.FC<ProductsTableProps> = ({
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-sm overflow-hidden flex flex-col">
-      <div className="overflow-x-auto">
+      {/* Mobile Card List View (< md) */}
+      <div className="block md:hidden p-3 space-y-3">
+        {products.map((p) => (
+          <ProductMobileCard
+            key={p.id}
+            product={p}
+            canManage={canManage}
+            onEdit={onEdit}
+            onDelete={onDelete}
+            onToggleStatus={onToggleStatus}
+          />
+        ))}
+      </div>
+
+      {/* Desktop Multi-column Table View (>= md) */}
+      <div className="hidden md:block overflow-x-auto">
         <table className="w-full text-right text-xs">
           <thead>
             <tr className="bg-slate-100 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 font-extrabold text-slate-800 dark:text-slate-100">
@@ -228,12 +244,13 @@ export const ProductsTable: React.FC<ProductsTableProps> = ({
             <b className="text-slate-800 dark:text-white">{totalPages}</b> (إجمالي {totalCount} صنف)
           </span>
 
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={() => onPageChange(currentPage - 1)}
               disabled={currentPage <= 1}
-              className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100"
+              aria-label="الصفحة السابقة"
+              className="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer shadow-sm"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -242,7 +259,8 @@ export const ProductsTable: React.FC<ProductsTableProps> = ({
               type="button"
               onClick={() => onPageChange(currentPage + 1)}
               disabled={currentPage >= totalPages}
-              className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100"
+              aria-label="الصفحة التالية"
+              className="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer shadow-sm"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>

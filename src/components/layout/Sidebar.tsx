@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
@@ -15,9 +15,15 @@ import {
   Sparkles,
   Building2,
   ShoppingBag,
+  X,
 } from 'lucide-react';
 
-export const Sidebar: React.FC = () => {
+export interface SidebarProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
+
+export const Sidebar: React.FC<SidebarProps> = ({ isOpen = false, onClose }) => {
   const { user, logout, isOwnerOrManager } = useAuth();
   const [storeName, setStoreName] = useState<string>(user?.storeName || 'إدارة المحل');
 
@@ -56,67 +62,101 @@ export const Sidebar: React.FC = () => {
   ];
 
   return (
-    <aside className="w-64 bg-slate-900 text-slate-300 flex flex-col h-screen fixed right-0 top-0 z-30 shadow-xl border-l border-slate-800 select-none">
-      <div className="p-6 flex items-center gap-3 border-b border-slate-800">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary-600 to-indigo-500 flex items-center justify-center text-white font-bold shadow-lg shadow-primary-500/30">
-          <Sparkles className="w-6 h-6" />
-        </div>
-        <div>
-          <h1 className="font-extrabold text-lg text-white tracking-wide">RetailOS</h1>
-          <p className="text-xs text-slate-400 font-medium truncate max-w-[140px]">
-            {storeName}
-          </p>
-        </div>
-      </div>
+    <>
+      {/* Mobile Dimmed Backdrop Overlay */}
+      <div
+        onClick={onClose}
+        className={
+          'fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-40 lg:hidden transition-opacity duration-300 ' +
+          (isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none')
+        }
+        aria-hidden="true"
+      />
 
-      <nav className="flex-1 p-4 space-y-1.5 overflow-y-auto">
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          return (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.exact}
-              className={({ isActive }) =>
-                "flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all text-sm " +
-                (isActive
-                  ? 'bg-primary-600 text-white font-semibold shadow-md shadow-primary-600/30'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800/60')
-              }
-            >
-              <Icon className="w-5 h-5 flex-shrink-0" />
-              <span>{item.label}</span>
-            </NavLink>
-          );
-        })}
-      </nav>
-
-      <div className="p-4 border-t border-slate-800 bg-slate-950/40">
-        <div className="flex items-center justify-between mb-3 px-2">
-          <div className="flex flex-col">
-            <span className="text-sm font-bold text-white">
-              {user ? user.firstName + ' ' + user.lastName : 'المستخدم'}
-            </span>
-            <span className="text-xs text-primary-400 font-semibold">
-              {user?.role === 'Owner'
-                ? 'مالك النظام'
-                : user?.role === 'Manager'
-                ? 'مدير فرع'
-                : user?.role === 'Merchant'
-                ? 'تاجر جملة'
-                : 'كاشير'}
-            </span>
+      {/* Sidebar / Mobile Off-Canvas Drawer */}
+      <aside
+        className={
+          'w-72 sm:w-64 bg-slate-900 text-slate-300 flex flex-col h-screen fixed right-0 top-0 z-50 shadow-2xl lg:shadow-xl border-l border-slate-800 select-none transition-transform duration-300 ease-in-out ' +
+          (isOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0')
+        }
+      >
+        <div className="p-5 sm:p-6 flex items-center justify-between border-b border-slate-800">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary-600 to-indigo-500 flex items-center justify-center text-white font-bold shadow-lg shadow-primary-500/30">
+              <Sparkles className="w-6 h-6" />
+            </div>
+            <div>
+              <h1 className="font-extrabold text-lg text-white tracking-wide">RetailOS</h1>
+              <p className="text-xs text-slate-400 font-medium truncate max-w-[130px] sm:max-w-[140px]">
+                {storeName}
+              </p>
+            </div>
           </div>
+
+          {/* Close button for mobile drawer */}
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="إغلاق القائمة"
+            className="lg:hidden p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition-colors touch-target flex items-center justify-center cursor-pointer"
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
 
-        <button
-          onClick={logout}
-          className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-semibold text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 transition"
-        >
-          <LogOut className="w-4 h-4" />
-          <span>تسجيل الخروج</span>
-        </button>
-      </div>
-    </aside>
+        <nav className="flex-1 p-3 sm:p-4 space-y-1.5 overflow-y-auto">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.exact}
+                onClick={onClose}
+                className={({ isActive }) =>
+                  "flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all text-sm min-h-[44px] " +
+                  (isActive
+                    ? 'bg-primary-600 text-white font-semibold shadow-md shadow-primary-600/30'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-800/60')
+                }
+              >
+                <Icon className="w-5 h-5 flex-shrink-0" />
+                <span>{item.label}</span>
+              </NavLink>
+            );
+          })}
+        </nav>
+
+        <div className="p-4 border-t border-slate-800 bg-slate-950/40 pb-safe">
+          <div className="flex items-center justify-between mb-3 px-2">
+            <div className="flex flex-col">
+              <span className="text-sm font-bold text-white">
+                {user ? user.firstName + ' ' + user.lastName : 'المستخدم'}
+              </span>
+              <span className="text-xs text-primary-400 font-semibold">
+                {user?.role === 'Owner'
+                  ? 'مالك النظام'
+                  : user?.role === 'Manager'
+                  ? 'مدير فرع'
+                  : user?.role === 'Merchant'
+                  ? 'تاجر جملة'
+                  : 'كاشير'}
+              </span>
+            </div>
+          </div>
+
+          <button
+            onClick={() => {
+              onClose?.();
+              logout();
+            }}
+            className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-semibold text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 transition min-h-[44px]"
+          >
+            <LogOut className="w-4 h-4" />
+            <span>تسجيل الخروج</span>
+          </button>
+        </div>
+      </aside>
+    </>
   );
 };

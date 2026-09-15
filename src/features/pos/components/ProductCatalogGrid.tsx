@@ -34,11 +34,11 @@ export const ProductCatalogGrid: React.FC<ProductCatalogGridProps> = ({
   return (
     <div className="flex-1 flex flex-col min-h-0 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700/80 shadow-sm overflow-hidden">
       {/* Category Pills Bar */}
-      <div className="p-3 border-b border-slate-100 dark:border-slate-700/80 bg-slate-50/50 dark:bg-slate-850/50 overflow-x-auto flex items-center gap-2 scrollbar-none">
+      <div className="p-2.5 sm:p-3 border-b border-slate-100 dark:border-slate-700/80 bg-slate-50/50 dark:bg-slate-850/50 overflow-x-auto flex items-center gap-2 no-scrollbar">
         <button
           type="button"
           onClick={() => setSelectedCategoryId('all')}
-          className={`px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+          className={`px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all min-h-[40px] cursor-pointer ${
             selectedCategoryId === 'all'
               ? 'bg-emerald-600 text-white shadow-sm'
               : 'bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600 hover:bg-slate-100'
@@ -52,7 +52,7 @@ export const ProductCatalogGrid: React.FC<ProductCatalogGridProps> = ({
             key={cat.id}
             type="button"
             onClick={() => setSelectedCategoryId(cat.id)}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+            className={`px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all min-h-[40px] cursor-pointer ${
               selectedCategoryId === cat.id
                 ? 'bg-emerald-600 text-white shadow-sm'
                 : 'bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600 hover:bg-slate-100'
@@ -63,8 +63,8 @@ export const ProductCatalogGrid: React.FC<ProductCatalogGridProps> = ({
         ))}
       </div>
 
-      {/* Product Cards Grid */}
-      <div className="flex-1 overflow-y-auto p-3">
+      {/* Product Cards Grid with bottom padding for mobile floating bar */}
+      <div className="flex-1 overflow-y-auto p-2.5 sm:p-3 pb-24 lg:pb-3">
         {isProductsLoading ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-2.5">
             {[...Array(8)].map((_, i) => (

@@ -90,20 +90,20 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className="space-y-8 font-sans" dir="rtl">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-800 p-4 sm:p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
         <div>
-          <h1 className="text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
-            <Sparkles className="w-6 h-6 text-primary-600" />
+          <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
+            <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-primary-600" />
             لوحة الإحصائيات والمؤشرات المباشرة
           </h1>
-          <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
+          <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1">
             متابعة دقيقة للأرباح، المبيعات، ومراقبة الراكد والنواقص في المخزن لحظياً
           </p>
         </div>
-        <div className="flex items-center gap-2 self-start sm:self-auto">
+        <div className="flex flex-col xs:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
           <button
             onClick={() => window.dispatchEvent(new CustomEvent('retailos:open-tour', { detail: { step: -1 } }))}
-            className="px-4 py-2 rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 hover:from-primary-700 hover:to-indigo-700 text-white font-bold text-xs shadow-md shadow-primary-500/20 hover:scale-105 active:scale-95 transition flex items-center gap-2 cursor-pointer"
+            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 hover:from-primary-700 hover:to-indigo-700 text-white font-bold text-xs shadow-md shadow-primary-500/20 active:scale-95 transition flex items-center justify-center gap-2 cursor-pointer min-h-[44px]"
           >
             <Sparkles className="w-4 h-4 text-amber-300" />
             <span>الجولة الإرشادية للمستخدم</span>
@@ -111,7 +111,7 @@ export const Dashboard: React.FC = () => {
           <button
             onClick={fetchDashboardData}
             disabled={loading}
-            className="btn btn-secondary flex items-center gap-2"
+            className="btn btn-secondary flex items-center justify-center gap-2 min-h-[44px]"
           >
             <RefreshCw className={"w-4 h-4 " + (loading ? 'animate-spin' : '')} />
             <span>تحديث البيانات</span>
@@ -119,16 +119,16 @@ export const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6">
         <div className="card border-r-4 border-r-primary-500 flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-semibold text-slate-500">مبيعات اليوم</span>
-            <div className="p-2.5 bg-primary-50 text-primary-600 rounded-xl">
+            <span className="text-sm font-semibold text-slate-500 dark:text-slate-400">مبيعات اليوم</span>
+            <div className="p-2.5 bg-primary-50 dark:bg-primary-950/50 text-primary-600 dark:text-primary-400 rounded-xl">
               <DollarSign className="w-5 h-5" />
             </div>
           </div>
           <div className="mt-4">
-            <h3 className="text-2xl font-black text-slate-900">
+            <h3 className="text-2xl font-black text-slate-900 dark:text-white">
               {(summary?.todaySalesRevenue || 0).toLocaleString('ar-EG', {
                 minimumFractionDigits: 2,
               })}{' '}

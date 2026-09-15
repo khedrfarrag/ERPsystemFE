@@ -9,6 +9,8 @@ import { PosSummary } from '../features/pos/components/PosSummary';
 import { CustomerSelectModal } from '../features/pos/components/CustomerSelectModal';
 import { PaymentModal } from '../features/pos/components/PaymentModal';
 import { ReceiptModal } from '../features/pos/components/ReceiptModal';
+import { PosMobileFloatingBar } from '../features/pos/components/PosMobileFloatingBar';
+import { PosMobileCartSheet } from '../features/pos/components/PosMobileCartSheet';
 import type { PosProduct, SaleResponseData } from '../features/pos/types/pos.types';
 
 export const Pos: React.FC = () => {
@@ -20,6 +22,7 @@ export const Pos: React.FC = () => {
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState<boolean>(false);
   const [completedSale, setCompletedSale] = useState<SaleResponseData | null>(null);
   const [isReceiptModalOpen, setIsReceiptModalOpen] = useState<boolean>(false);
+  const [isMobileCartSheetOpen, setIsMobileCartSheetOpen] = useState<boolean>(false);
 
   // Cart Hook
   const {
@@ -54,6 +57,7 @@ export const Pos: React.FC = () => {
     setIsCustomerModalOpen(false);
     setIsPaymentModalOpen(false);
     setIsReceiptModalOpen(false);
+    setIsMobileCartSheetOpen(false);
   }, []);
 
   // Register Global Keyboard Shortcuts
@@ -78,6 +82,7 @@ export const Pos: React.FC = () => {
   const handleSaleSuccess = useCallback(
     (sale: SaleResponseData) => {
       setIsPaymentModalOpen(false);
+      setIsMobileCartSheetOpen(false);
       clearCart();
       setCompletedSale(sale);
       setIsReceiptModalOpen(true);
@@ -86,9 +91,9 @@ export const Pos: React.FC = () => {
   );
 
   return (
-    <div className="h-[calc(100vh-5rem)] flex flex-col gap-3">
+    <div className="h-[calc(100vh-4.5rem)] sm:h-[calc(100vh-5rem)] flex flex-col gap-2.5 sm:gap-3">
       {/* Top Header Bar */}
-      <div className="flex items-center gap-3 bg-white dark:bg-slate-800 p-3 rounded-2xl border border-slate-200 dark:border-slate-700/80 shadow-sm shrink-0">
+      <div className="flex items-center gap-3 bg-white dark:bg-slate-800 p-2.5 sm:p-3 rounded-2xl border border-slate-200 dark:border-slate-700/80 shadow-sm shrink-0">
         <BarcodeScannerInput
           onProductFound={handleProductSelect}
           searchQuery={searchQuery}
@@ -98,17 +103,17 @@ export const Pos: React.FC = () => {
       </div>
 
       {/* Main Interactive Screen Grid: Catalog vs Cart */}
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-3 min-h-0 overflow-hidden">
-        {/* Left/Main Column: Visual Catalog Grid */}
-        <div className="lg:col-span-7 xl:col-span-8 flex flex-col min-h-0">
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-3 min-h-0 overflow-hidden relative">
+        {/* Left/Main Column: Visual Catalog Grid (Full width on mobile, 7-8 cols on desktop) */}
+        <div className="lg:col-span-7 xl:col-span-8 flex flex-col min-h-0 w-full">
           <ProductCatalogGrid
             onSelectProduct={handleProductSelect}
             searchQuery={searchQuery}
           />
         </div>
 
-        {/* Right Column: Live Cart & Memoized Summary */}
-        <div className="lg:col-span-5 xl:col-span-4 flex flex-col gap-3 min-h-0">
+        {/* Right Column: Live Cart & Memoized Summary (Desktop only) */}
+        <div className="hidden lg:flex lg:col-span-5 xl:col-span-4 flex-col gap-3 min-h-0">
           <PosCart
             items={items}
             onUpdateQuantity={updateQuantity}
@@ -127,6 +132,30 @@ export const Pos: React.FC = () => {
           />
         </div>
       </div>
+
+      {/* Mobile Sticky Floating Cart Bar */}
+      <PosMobileFloatingBar
+        totals={totals}
+        onOpenCartSheet={() => setIsMobileCartSheetOpen(true)}
+        onOpenCheckout={() => setIsPaymentModalOpen(true)}
+      />
+
+      {/* Mobile Slide-Up Cart Bottom Sheet */}
+      <PosMobileCartSheet
+        isOpen={isMobileCartSheetOpen}
+        onClose={() => setIsMobileCartSheetOpen(false)}
+        items={items}
+        totals={totals}
+        customer={selectedCustomer}
+        overallDiscount={overallDiscount}
+        onUpdateQuantity={updateQuantity}
+        onUpdateDiscount={updateItemDiscount}
+        onRemoveItem={removeItem}
+        onOpenCustomerModal={() => setIsCustomerModalOpen(true)}
+        onOpenPaymentModal={() => setIsPaymentModalOpen(true)}
+        onClearCart={clearCart}
+        onSetOverallDiscount={setOverallDiscount}
+      />
 
       {/* Modals */}
       <CustomerSelectModal

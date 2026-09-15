@@ -4,10 +4,15 @@ import { useTheme } from '../../context/ThemeContext';
 import { useQuery } from '@tanstack/react-query';
 import api from '../../api/client';
 import type { ApiResponse, DashboardSummary } from '../../types';
-import { Store, Wallet, AlertTriangle, Sun, Moon, LogOut, Sparkles } from 'lucide-react';
+import { Store, Wallet, AlertTriangle, Sun, Moon, LogOut, Sparkles, Menu } from 'lucide-react';
 import { NotificationDropdown } from './NotificationDropdown';
 
-export const Navbar: React.FC = () => {
+export interface NavbarProps {
+  onToggleSidebar?: () => void;
+  isSidebarOpen?: boolean;
+}
+
+export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
 
@@ -21,19 +26,29 @@ export const Navbar: React.FC = () => {
   });
 
   return (
-    <header className="h-16 bg-white dark:bg-slate-800 border-b border-slate-200/80 dark:border-slate-700 flex items-center justify-between px-6 sticky top-0 z-20 shadow-sm transition-colors">
-      {/* Left: Store Branding & Live Shift Indicators */}
-      <div className="flex items-center gap-3">
-        <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 dark:bg-slate-700 rounded-xl text-slate-800 dark:text-slate-100 text-xs font-bold">
-          <Store className="w-4 h-4 text-primary-600 dark:text-primary-400" />
-          <span>{user?.storeName || 'المتجر الرئيسي'}</span>
+    <header className="h-16 bg-white dark:bg-slate-800 border-b border-slate-200/80 dark:border-slate-700 flex items-center justify-between px-3 sm:px-6 sticky top-0 z-20 shadow-sm transition-colors">
+      {/* Left / Start: Mobile Menu Toggle & Store Branding & Shift Indicators */}
+      <div className="flex items-center gap-2 sm:gap-3">
+        {/* Mobile Hamburger Drawer Toggle Button */}
+        <button
+          type="button"
+          onClick={onToggleSidebar}
+          aria-label="فتح القائمة الرئيسية"
+          className="lg:hidden p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-100 transition-colors flex items-center justify-center cursor-pointer touch-target shadow-sm"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+
+        <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 bg-slate-100 dark:bg-slate-700 rounded-xl text-slate-800 dark:text-slate-100 text-xs font-bold">
+          <Store className="w-4 h-4 text-primary-600 dark:text-primary-400 shrink-0" />
+          <span className="truncate max-w-[90px] xs:max-w-[120px] sm:max-w-none">{user?.storeName || 'المتجر الرئيسي'}</span>
         </div>
 
         {summary && summary.isCashRegisterOpen ? (
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 rounded-xl text-xs font-bold">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <Wallet className="w-3.5 h-3.5" />
-            <span>درج الكاشير:</span>
+          <div className="hidden xs:flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 rounded-xl text-xs font-bold">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+            <Wallet className="w-3.5 h-3.5 shrink-0" />
+            <span className="hidden sm:inline">درج الكاشير:</span>
             <span className="font-mono text-xs font-black">
               {summary.liveCashDrawerBalance.toLocaleString('ar-EG', { minimumFractionDigits: 2 })} ج.م
             </span>

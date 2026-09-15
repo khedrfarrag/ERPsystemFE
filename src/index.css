@@ -42,9 +42,26 @@
     @apply bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200/90 dark:border-slate-700 shadow-sm text-slate-900 dark:text-slate-100 transition-colors;
   }
 
-  /* WCAG High-Contrast Inputs, Selects & Textareas */
+  /* WCAG High-Contrast Inputs, Selects & Textareas (16px on mobile to prevent iOS auto-zoom) */
   .input {
-    @apply w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all;
+    @apply w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-xl px-4 py-2.5 text-base sm:text-xs font-semibold text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all;
+  }
+
+  /* Mobile Safe Area & Touch Ergonomics */
+  .pb-safe {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  /* Smooth horizontal scrollbar hiding for mobile filter chips */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 
   /* High-Contrast Table Architecture */
