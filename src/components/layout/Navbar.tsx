@@ -69,16 +69,16 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
       </div>
 
       {/* Right: Theme Toggle & User Info & Logout */}
-      <div className="flex items-center gap-3">
-        {/* Interactive Tour Button */}
+      <div className="flex items-center gap-1.5 sm:gap-3">
+        {/* Interactive Tour Button (Desktop / Tablet only) */}
         <button
           type="button"
           onClick={() => window.dispatchEvent(new CustomEvent('retailos:open-tour', { detail: { step: -1 } }))}
           title="دليل وجولة النظام التفاعلية"
-          className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-primary-50 to-indigo-50 dark:from-primary-950/60 dark:to-indigo-950/60 border border-primary-200/80 dark:border-primary-800 text-primary-700 dark:text-primary-300 hover:scale-105 active:scale-95 transition flex items-center gap-1.5 cursor-pointer text-xs font-bold shadow-sm"
+          className="hidden md:flex px-3 py-1.5 rounded-xl bg-gradient-to-r from-primary-50 to-indigo-50 dark:from-primary-950/60 dark:to-indigo-950/60 border border-primary-200/80 dark:border-primary-800 text-primary-700 dark:text-primary-300 hover:scale-105 active:scale-95 transition items-center gap-1.5 cursor-pointer text-xs font-bold shadow-sm"
         >
           <Sparkles className="w-3.5 h-3.5 text-primary-600 dark:text-primary-400" />
-          <span className="hidden sm:inline">جولة في النظام</span>
+          <span className="hidden lg:inline">جولة في النظام</span>
         </button>
 
         {/* Notification Center */}
@@ -89,7 +89,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
           type="button"
           onClick={toggleTheme}
           title={theme === 'dark' ? 'التبديل إلى النمط الفاتح' : 'التبديل إلى النمط الداكن'}
-          className="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-100 transition-colors flex items-center justify-center cursor-pointer shadow-sm"
+          className="p-2 sm:p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-100 transition-colors flex items-center justify-center cursor-pointer shadow-sm min-h-[38px] min-w-[38px]"
         >
           {theme === 'dark' ? (
             <Sun className="w-4 h-4 text-amber-400" />
@@ -99,8 +99,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
         </button>
 
         {/* User Card */}
-        <div className="flex items-center gap-2.5 border-r border-slate-200 dark:border-slate-700 pr-3">
-          <div className="text-left hidden sm:block">
+        <div className="flex items-center gap-2 border-r border-slate-200 dark:border-slate-700 pr-2 sm:pr-3">
+          <div className="text-left hidden md:block">
             <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">
               {user?.firstName} {user?.lastName}
             </p>
@@ -114,17 +114,17 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
                 : 'أمين مخزن'}
             </p>
           </div>
-          <div className="w-9 h-9 rounded-xl bg-primary-100 dark:bg-primary-950 border border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300 flex items-center justify-center font-black text-sm">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-primary-100 dark:bg-primary-950 border border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300 flex items-center justify-center font-black text-xs sm:text-sm shrink-0">
             {user?.firstName ? user.firstName[0] : 'U'}
           </div>
         </div>
 
-        {/* Logout */}
+        {/* Logout (Hidden on mobile since it is prominently located in the Mobile Drawer) */}
         <button
           type="button"
           onClick={logout}
           title="تسجيل الخروج"
-          className="p-2 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 transition-colors"
+          className="hidden sm:flex p-2 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 transition-colors cursor-pointer"
         >
           <LogOut className="w-4 h-4" />
         </button>

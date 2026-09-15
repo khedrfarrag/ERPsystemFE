@@ -146,6 +146,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen = false, onClose }) => 
           </div>
 
           <button
+            type="button"
+            onClick={() => {
+              onClose?.();
+              window.dispatchEvent(new CustomEvent('retailos:open-tour', { detail: { step: -1 } }));
+            }}
+            className="w-full flex items-center justify-center gap-2 py-2 px-3 mb-2 rounded-xl text-xs font-bold text-primary-300 bg-primary-950/60 border border-primary-800/80 hover:bg-primary-900/60 transition min-h-[40px] cursor-pointer"
+          >
+            <Sparkles className="w-4 h-4 text-amber-300" />
+            <span>الجولة الإرشادية للنظام</span>
+          </button>
+
+          <button
             onClick={() => {
               onClose?.();
               logout();
