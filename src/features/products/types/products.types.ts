@@ -1,4 +1,4 @@
-﻿export interface Product {
+export interface Product {
   id: string;
   name: string;
   barcode?: string;
@@ -23,7 +23,10 @@ export interface Category {
   id: string;
   name: string;
   description?: string;
+  isActive?: boolean;
   productCount?: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Unit {

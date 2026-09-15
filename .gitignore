@@ -45,3 +45,8 @@ secrets/
 *.crt
 *.cert
 *.p12
+
+# Scratch and test files
+scratch/
+test_openrouter.json
+

@@ -36,3 +36,40 @@ export const expenseSchema = z.object({
 });
 
 export type ExpenseFormData = z.infer<typeof expenseSchema>;
+
+export const changePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(1, 'كلمة المرور الحالية مطلوبة'),
+    newPassword: z
+      .string()
+      .min(8, 'كلمة المرور يجب ألا تقل عن 8 أحرف')
+      .regex(/[A-Z]/, 'يجب أن تحتوي على حرف كبير واحد على الأقل (A-Z)')
+      .regex(/[a-z]/, 'يجب أن تحتوي على حرف صغير واحد على الأقل (a-z)')
+      .regex(/[0-9]/, 'يجب أن تحتوي على رقم واحد على الأقل (0-9)')
+      .regex(/[^a-zA-Z0-9]/, 'يجب أن تحتوي على رمز خاص واحد على الأقل (!@#$%^&*)'),
+    confirmPassword: z.string().min(1, 'تأكيد كلمة المرور مطلوب'),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: 'كلمتا المرور غير متطابقتين',
+    path: ['confirmPassword'],
+  });
+
+export type ChangePasswordFormData = z.infer<typeof changePasswordSchema>;
+
+export const registerStoreSchema = z.object({
+  storeName: z.string().min(2, 'اسم المتجر يجب أن يكون حرفين على الأقل'),
+  businessType: z.string().min(1, 'نوع النشاط التجاري مطلوب'),
+  ownerFirstName: z.string().min(2, 'الاسم الأول لصاحب المتجر مطلوب'),
+  ownerLastName: z.string().min(2, 'اسم العائلة مطلوب'),
+  email: z.string().min(1, 'البريد الإلكتروني مطلوب').email('صيغة البريد الإلكتروني غير صحيحة'),
+  password: z
+    .string()
+    .min(8, 'كلمة المرور يجب ألا تقل عن 8 أحرف')
+    .regex(/[A-Z]/, 'يجب أن تحتوي على حرف كبير واحد على الأقل')
+    .regex(/[a-z]/, 'يجب أن تحتوي على حرف صغير واحد على الأقل')
+    .regex(/[0-9]/, 'يجب أن تحتوي على رقم واحد على الأقل'),
+  phone: z.string().optional(),
+  address: z.string().optional(),
+});
+
+export type RegisterStoreFormData = z.infer<typeof registerStoreSchema>;

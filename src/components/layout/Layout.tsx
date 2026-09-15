@@ -5,6 +5,7 @@ import { Sidebar } from './Sidebar';
 import { Navbar } from './Navbar';
 import { UserOnboardingTour } from '../onboarding/UserOnboardingTour';
 import { ForceChangePasswordModal } from '../auth/ForceChangePasswordModal';
+import { AiCopilotWidget } from '../../features/ai-copilot/components/AiCopilotWidget';
 
 export const Layout: React.FC = () => {
   const { isAuthenticated, user } = useAuth();
@@ -48,6 +49,7 @@ export const Layout: React.FC = () => {
       <div className="print:hidden">
         <UserOnboardingTour />
         <ForceChangePasswordModal isOpen={!!user?.mustChangePassword} />
+        <AiCopilotWidget />
       </div>
     </div>
   );

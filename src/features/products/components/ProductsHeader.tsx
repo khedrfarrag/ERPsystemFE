@@ -1,5 +1,5 @@
 import React from 'react';
-import { Package, AlertTriangle, XCircle, Plus, FileSpreadsheet, Sparkles } from 'lucide-react';
+import { Package, AlertTriangle, XCircle, Plus, FileSpreadsheet, Sparkles, Layers } from 'lucide-react';
 
 interface ProductsHeaderProps {
   totalCount: number;
@@ -8,6 +8,7 @@ interface ProductsHeaderProps {
   onOpenAddModal: () => void;
   onOpenImportModal: () => void;
   onOpenAiScannerModal: () => void;
+  onOpenCategoriesModal: () => void;
   canManage: boolean;
 }
 
@@ -18,6 +19,7 @@ export const ProductsHeader: React.FC<ProductsHeaderProps> = ({
   onOpenAddModal,
   onOpenImportModal,
   onOpenAiScannerModal,
+  onOpenCategoriesModal,
   canManage,
 }) => {
   return (
@@ -35,6 +37,16 @@ export const ProductsHeader: React.FC<ProductsHeaderProps> = ({
 
         {canManage && (
           <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={onOpenCategoriesModal}
+              className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 text-slate-700 dark:text-slate-200 text-xs font-bold transition-all shadow-sm"
+              title="إدارة أقسام وفئات المنتجات، تعديلها أو حذفها"
+            >
+              <Layers className="w-4 h-4 text-emerald-600" />
+              <span>إدارة الأقسام</span>
+            </button>
+
             <button
               type="button"
               onClick={onOpenAiScannerModal}

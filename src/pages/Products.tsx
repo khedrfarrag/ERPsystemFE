@@ -9,6 +9,7 @@ import { ProductModal } from '../features/products/components/ProductModal';
 import { DeleteProductModal } from '../features/products/components/DeleteProductModal';
 import { ImportProductsModal } from '../features/products/components/ImportProductsModal';
 import { AiInvoiceScanModal } from '../features/ai-scanner/components/AiInvoiceScanModal';
+import { ManageCategoriesModal } from '../features/products/components/ManageCategoriesModal';
 import type { Product } from '../features/products/types/products.types';
 
 export const Products: React.FC = () => {
@@ -29,6 +30,7 @@ export const Products: React.FC = () => {
   const [productToDelete, setProductToDelete] = useState<Product | null>(null);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [isAiScannerOpen, setIsAiScannerOpen] = useState(false);
+  const [isCategoriesModalOpen, setIsCategoriesModalOpen] = useState(false);
 
   // Queries
   const { data: categories = [] } = useCategoriesQuery();
@@ -113,6 +115,7 @@ export const Products: React.FC = () => {
         onOpenAddModal={handleOpenAddModal}
         onOpenImportModal={() => setIsImportModalOpen(true)}
         onOpenAiScannerModal={() => setIsAiScannerOpen(true)}
+        onOpenCategoriesModal={() => setIsCategoriesModalOpen(true)}
         canManage={canManage}
       />
 
@@ -180,6 +183,13 @@ export const Products: React.FC = () => {
       <ImportProductsModal
         isOpen={isImportModalOpen}
         onClose={() => setIsImportModalOpen(false)}
+      />
+
+      {/* Manage Categories Modal */}
+      <ManageCategoriesModal
+        isOpen={isCategoriesModalOpen}
+        onClose={() => setIsCategoriesModalOpen(false)}
+        categories={categories}
       />
     </div>
   );

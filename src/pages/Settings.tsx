@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { Users, Store, ShieldCheck, RefreshCw } from 'lucide-react';
+import { Users, Store, ShieldCheck, RefreshCw, KeyRound } from 'lucide-react';
 import { useUsers } from '../features/settings/hooks/useUsers';
 import { useStoreProfile } from '../features/settings/hooks/useStoreProfile';
 import { UsersTab } from '../features/settings/components/UsersTab';
 import { StoreProfileTab } from '../features/settings/components/StoreProfileTab';
+import { AccountSecurityTab } from '../features/settings/components/AccountSecurityTab';
 import { useAuth } from '../context/AuthContext';
 
-type TabType = 'users' | 'store';
+type TabType = 'users' | 'store' | 'account';
 
 export const Settings: React.FC = () => {
-  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<TabType>('users');
 
   const {
@@ -35,7 +35,7 @@ export const Settings: React.FC = () => {
   const handleRefresh = () => {
     if (activeTab === 'users') {
       refetchUsers();
-    } else {
+    } else if (activeTab === 'store') {
       refetchStore();
     }
   };
@@ -54,7 +54,7 @@ export const Settings: React.FC = () => {
                 إعدادات المتجر والمستخدمين
               </h1>
               <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-                إدارة طاقم العمل، حسابات الكاشيرين، الصلاحيات وبيانات المتجر والضرائب
+                إدارة طاقم العمل، حسابات الكاشيرين، الصلاحيات وبيانات المتجر وتأمين الحساب
               </p>
             </div>
           </div>
@@ -74,11 +74,11 @@ export const Settings: React.FC = () => {
       </div>
 
       {/* Tabs Switcher */}
-      <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-700/60 pb-px">
+      <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-700/60 pb-px overflow-x-auto">
         <button
           type="button"
           onClick={() => setActiveTab('users')}
-          className={`flex items-center gap-2.5 px-5 py-3 text-sm font-semibold rounded-t-xl transition-all border-b-2 -mb-px ${
+          className={`flex items-center gap-2.5 px-5 py-3 text-sm font-semibold rounded-t-xl transition-all border-b-2 -mb-px shrink-0 ${
             activeTab === 'users'
               ? 'border-primary text-primary bg-primary/5 dark:bg-primary/10'
               : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100/50 dark:hover:bg-slate-800/50'
@@ -102,7 +102,7 @@ export const Settings: React.FC = () => {
         <button
           type="button"
           onClick={() => setActiveTab('store')}
-          className={`flex items-center gap-2.5 px-5 py-3 text-sm font-semibold rounded-t-xl transition-all border-b-2 -mb-px ${
+          className={`flex items-center gap-2.5 px-5 py-3 text-sm font-semibold rounded-t-xl transition-all border-b-2 -mb-px shrink-0 ${
             activeTab === 'store'
               ? 'border-primary text-primary bg-primary/5 dark:bg-primary/10'
               : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100/50 dark:hover:bg-slate-800/50'
@@ -115,6 +115,19 @@ export const Settings: React.FC = () => {
               ضريبة 14%
             </span>
           )}
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab('account')}
+          className={`flex items-center gap-2.5 px-5 py-3 text-sm font-semibold rounded-t-xl transition-all border-b-2 -mb-px shrink-0 ${
+            activeTab === 'account'
+              ? 'border-primary text-primary bg-primary/5 dark:bg-primary/10'
+              : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100/50 dark:hover:bg-slate-800/50'
+          }`}
+        >
+          <KeyRound className="w-4 h-4" />
+          <span>حسابي والأمان</span>
         </button>
       </div>
 
@@ -139,6 +152,8 @@ export const Settings: React.FC = () => {
           onUpdateStore={updateStore}
         />
       )}
+
+      {activeTab === 'account' && <AccountSecurityTab />}
     </div>
   );
 };

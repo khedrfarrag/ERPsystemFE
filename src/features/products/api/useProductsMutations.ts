@@ -125,6 +125,100 @@ export function useCreateCategoryMutation() {
   });
 }
 
+export function useUpdateCategoryMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (payload: { id: string; name: string; description?: string | null }) => {
+      const response = await api.put<ApiResponse<Category>>(`/categories/${payload.id}`, {
+        name: payload.name,
+        description: payload.description,
+      });
+      if (!response.data.success || !response.data.data) {
+        throw new Error(response.data.message || 'فشل تحديث بيانات القسم');
+      }
+      return response.data.data;
+    },
+    onSuccess: (data) => {
+      toast.success(`تم تحديث القسم "${data.name}" بنجاح`);
+      queryClient.invalidateQueries({ queryKey: ['categories'] });
+      queryClient.invalidateQueries({ queryKey: ['products'] });
+    },
+    onError: (error: unknown) => {
+      const err = error as { response?: { data?: { message?: string } }; message?: string };
+      toast.error(err.response?.data?.message || err.message || 'حدث خطأ أثناء تعديل القسم');
+    },
+  });
+}
+
+export function useUpdateCategoryStatusMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (payload: { id: string; isActive: boolean }) => {
+      const response = await api.patch<ApiResponse<Category>>(`/categories/${payload.id}/status`, {
+        isActive: payload.isActive,
+      });
+      if (!response.data.success || !response.data.data) {
+        throw new Error(response.data.message || 'فشل تغيير حالة القسم');
+      }
+      return response.data.data;
+    },
+    onSuccess: (data) => {
+      toast.success(data.isActive ? `تم تفعيل القسم "${data.name}"` : `تم تعطيل القسم "${data.name}"`);
+      queryClient.invalidateQueries({ queryKey: ['categories'] });
+      queryClient.invalidateQueries({ queryKey: ['products'] });
+    },
+    onError: (error: unknown) => {
+      const err = error as { response?: { data?: { message?: string } }; message?: string };
+      toast.error(err.response?.data?.message || err.message || 'حدث خطأ أثناء تعديل حالة القسم');
+    },
+  });
+}
+
+export function useDeleteCategoryMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      await api.delete(`/categories/${id}`);
+      return id;
+    },
+    onSuccess: () => {
+      toast.success('تم حذف القسم بنجاح');
+      queryClient.invalidateQueries({ queryKey: ['categories'] });
+      queryClient.invalidateQueries({ queryKey: ['products'] });
+    },
+    onError: (error: unknown) => {
+      const err = error as {
+        response?: {
+          status?: number;
+          data?: {
+            error?: { code?: string; message?: string };
+            message?: string;
+          };
+        };
+        message?: string;
+      };
+
+      const errorCode = err.response?.data?.error?.code;
+      if (err.response?.status === 409 || errorCode === 'CATEGORY_HAS_PRODUCTS') {
+        toast.error(
+          'لا يمكن حذف هذا القسم لأنه يحتوي على منتجات مسجلة بالفعل. يرجى نقل أو حذف المنتجات أولاً، أو تعطيل القسم بدلاً من حذفه.'
+        );
+        return;
+      }
+
+      toast.error(
+        err.response?.data?.error?.message ||
+          err.response?.data?.message ||
+          err.message ||
+          'حدث خطأ أثناء حذف القسم'
+      );
+    },
+  });
+}
+
 export function useCreateUnitMutation() {
   const queryClient = useQueryClient();
 

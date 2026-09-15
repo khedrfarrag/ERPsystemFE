@@ -9,10 +9,12 @@ import {
   AlertTriangle,
   CheckCircle2,
   Store,
+  Layers,
 } from 'lucide-react';
 import { productFormSchema, type ProductFormData } from '../types/products.schemas';
 import { useCreateProductMutation, useUpdateProductMutation } from '../api/useProductsMutations';
 import { CategoryUnitModal } from './CategoryUnitModal';
+import { ManageCategoriesModal } from './ManageCategoriesModal';
 import type { Product, Category, Unit } from '../types/products.types';
 
 interface ProductModalProps {
@@ -31,6 +33,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
   units,
 }) => {
   const [categoryModalMode, setCategoryModalMode] = useState<'category' | 'unit' | null>(null);
+  const [isManageCategoriesOpen, setIsManageCategoriesOpen] = useState(false);
 
   const createMutation = useCreateProductMutation();
   const updateMutation = useUpdateProductMutation();
@@ -252,14 +255,25 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                   <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
                     القسم / الفئة *
                   </label>
-                  <button
-                    type="button"
-                    onClick={() => setCategoryModalMode('category')}
-                    className="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold hover:underline flex items-center gap-0.5"
-                  >
-                    <Plus className="w-3 h-3" />
-                    <span>قسم جديد</span>
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setIsManageCategoriesOpen(true)}
+                      className="text-[11px] text-slate-500 hover:text-emerald-600 font-bold hover:underline flex items-center gap-0.5"
+                      title="إدارة وتعديل وحذف الأقسام"
+                    >
+                      <Layers className="w-3 h-3" />
+                      <span>إدارة</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setCategoryModalMode('category')}
+                      className="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold hover:underline flex items-center gap-0.5"
+                    >
+                      <Plus className="w-3 h-3" />
+                      <span>قسم جديد</span>
+                    </button>
+                  </div>
                 </div>
                 <select
                   {...register('categoryId')}
@@ -504,6 +518,13 @@ export const ProductModal: React.FC<ProductModalProps> = ({
           if (categoryModalMode === 'category') setValue('categoryId', id);
           if (categoryModalMode === 'unit') setValue('unitId', id);
         }}
+      />
+
+      {/* Full Category Management Modal */}
+      <ManageCategoriesModal
+        isOpen={isManageCategoriesOpen}
+        onClose={() => setIsManageCategoriesOpen(false)}
+        categories={categories}
       />
     </>
   );
